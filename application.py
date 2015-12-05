@@ -10,7 +10,7 @@ application = Flask(__name__)
 @application.route('/<name>')
 def hello_world(name=None):
     products = []
-    products.append(Product("test", "http://myUrl", "http://myPicture", 5, 10))
+    products.append(Product("test", "http://myUrl", "https://images.costco-static.com/image/media/80-810983-847__1.jpg", 5, 10))
     products.append(Product("test2", "http://myUrl", "http://myPicture", 4, 10))
     products.append(Product("test3", "http://myUrl", "http://myPicture", 3, 10))
     products.append(Product("test4", "http://myUrl", "http://myPicture", 2, 10))

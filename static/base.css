@@ -53,3 +53,8 @@
     top:2px;
     left:2px;
 }
+
+.productImage {
+    float: left;
+    padding-right: 10px;
+}
