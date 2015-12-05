@@ -12,3 +12,5 @@ First you will need the awsebcli packge to run the commands:
 
     pip install awsebcli
 
+
+The default url for UI is: http://snacks-dev.elasticbeanstalk.com/
