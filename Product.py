@@ -1,7 +1,27 @@
-class Product:
-    def __init__(self, name, product_url, image_url, rating, votes):
-        self.name = name
-        self.product_url = product_url
-        self.image_url = image_url
-        self.rating = rating
-        self.votes = votes
+import fileio
+
+
+def static_vars(**kwargs):
+    def decorate(func):
+        for k in kwargs:
+            setattr(func, k, kwargs[k])
+        return func
+    return decorate
+
+
+@static_vars(products=None)
+def get_products():
+    if not get_products.products:
+        get_products.products = fileio.FileIO.read()
+        get_products.cached = True
+    return get_products.products
+
+
+def save_products():
+    fileio.FileIO.write(get_products.products)
+
+
+if __name__ == '__main__':
+    print(get_products())
+    for key, value in get_products().items():
+        print(value)
