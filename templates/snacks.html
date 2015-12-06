@@ -2,33 +2,35 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="/static/base.css">
-        <link rel="stylesheet" type="text/css" href="/static/default.css">
-        <link rel="stylesheet" type="text/css" href="/static/fonts.css">
+{#        <link rel="stylesheet" type="text/css" href="/static/default.css">#}
+{#        <link rel="stylesheet" type="text/css" href="/static/fonts.css">#}
         <meta charset="UTF-8">
         <title>Size Up Snacks</title>
     </head>
     <body>
-
-    {% for key, product in products.items() %}
-        <div>
-            <img class="productImage" src="{{ product.image_url }}"/>
-            {% with round_rating = product.rating|round(0,"common") %}
-            <fieldset class="rating">
-                <input type="radio" id="awesome{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="5" {% if round_rating > 4 %} checked {% endif %}/><label for="awesome{{ loop.index0 }}" title="Rocks!">5 stars</label>
-                <input type="radio" id="good{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="4" {% if round_rating > 3 and round_rating <= 4 %} checked {% endif %}/><label for="good{{ loop.index0 }}" title="Pretty good">4 stars</label>
-                <input type="radio" id="average{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="3" {% if round_rating > 2 and round_rating <= 3 %} checked {% endif %}/><label for="average{{ loop.index0 }}" title="Meh">3 stars</label>
-                <input type="radio" id="notGood{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="2" {% if round_rating > 1 and round_rating <= 2 %} checked {% endif %}/><label for="notGood{{ loop.index0 }}" title="Kinda bad">2 stars</label>
-                <input type="radio" id="sucks{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="1" {% if round_rating > 0 and round_rating <= 1 %} checked {% endif %}/><label for="sucks{{ loop.index0 }}" title="Sucks big time">1 star</label>
-            </fieldset>
-            {% endwith %}
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-    {% endfor %}
+    {% if products %}
+        {% for key, product in products.items() %}
+            <div>
+                <img class="productImage" src="{{ product.image_url }}"/>
+                <span style="vertical-align: middle; padding-left: 15px">{{ product.product_name }}</span>
+                {% with round_rating = product.rating|round(0,"common") %}
+                <fieldset class="rating">
+                    <input type="radio" id="awesome{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="5" {% if round_rating > 4 %} checked {% endif %}/><label for="awesome{{ loop.index0 }}" title="Rocks!">5 stars</label>
+                    <input type="radio" id="good{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="4" {% if round_rating > 3 and round_rating <= 4 %} checked {% endif %}/><label for="good{{ loop.index0 }}" title="Pretty good">4 stars</label>
+                    <input type="radio" id="average{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="3" {% if round_rating > 2 and round_rating <= 3 %} checked {% endif %}/><label for="average{{ loop.index0 }}" title="Meh">3 stars</label>
+                    <input type="radio" id="notGood{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="2" {% if round_rating > 1 and round_rating <= 2 %} checked {% endif %}/><label for="notGood{{ loop.index0 }}" title="Kinda bad">2 stars</label>
+                    <input type="radio" id="sucks{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="1" {% if round_rating > 0 and round_rating <= 1 %} checked {% endif %}/><label for="sucks{{ loop.index0 }}" title="Sucks big time">1 star</label>
+                </fieldset>
+                {% endwith %}
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        {% endfor %}
+    {% endif %}
 
 
     </body>

@@ -2,18 +2,16 @@ import fileio
 from decorators import static_vars
 
 
-__data_filename = 'data.json'
-
-
 @static_vars(products=None)
 def get_products():
     if not get_products.products:
-        get_products.products = fileio.read_json(__data_filename)
+        file_handler = fileio.FileIO()
+        get_products.products = file_handler.read()
     return get_products.products
 
 
 def save_products():
-    fileio.write_json(__data_filename, get_products.products)
+    fileio.FileIO().write(get_products.products)
 
 
 if __name__ == '__main__':
