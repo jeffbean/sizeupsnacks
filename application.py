@@ -20,7 +20,6 @@ stats = VoteStats([0, 0, 0, 0, 0])
 
 
 @application.route('/')
-@application.route('/<name>')
 def hello_world(name=None):
     return render_template('snacks.html', name=name, products=product.get_products())
 

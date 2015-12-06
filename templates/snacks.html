@@ -2,21 +2,17 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="/static/base.css">
-        <link rel="stylesheet" type="text/css" href="/static/default.css">
-        <link rel="stylesheet" type="text/css" href="/static/fonts.css">
+{#        <link rel="stylesheet" type="text/css" href="/static/default.css">#}
+{#        <link rel="stylesheet" type="text/css" href="/static/fonts.css">#}
         <meta charset="UTF-8">
         <title>Size Up Snacks</title>
-        {% if name %}
-          <h1>Hello {{ name }}!</h1>
-        {% else %}
-          <h1>Hello World!</h1>
-        {% endif %}
     </head>
     <body>
     {% if products %}
         {% for key, product in products.items() %}
             <div>
                 <img class="productImage" src="{{ product.image_url }}"/>
+                <span style="vertical-align: middle; padding-left: 15px">{{ product.product_name }}</span>
                 {% with round_rating = product.rating|round(0,"common") %}
                 <fieldset class="rating">
                     <input type="radio" id="awesome{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="5" {% if round_rating > 4 %} checked {% endif %}/><label for="awesome{{ loop.index0 }}" title="Rocks!">5 stars</label>

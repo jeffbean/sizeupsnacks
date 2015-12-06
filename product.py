@@ -7,7 +7,6 @@ def get_products():
     if not get_products.products:
         file_handler = fileio.FileIO()
         get_products.products = file_handler.read()
-        get_products.cached = True
     return get_products.products
 
 

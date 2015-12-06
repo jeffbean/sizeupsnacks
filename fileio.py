@@ -27,7 +27,8 @@ class FileIO:
 
     def read(self):
         try:
-            os.remove('snacks-local.json')
+            if os.path.isfile('snacks-local.json'):
+                os.remove('snacks-local.json')
             s3obj = self.bucket.download_file('snacks.json', 'snacks-local.json')
         except botocore.exceptions.ClientError as e:
             # If a client error is thrown, then check that it was a 404 error.
@@ -43,3 +44,7 @@ class FileIO:
 
     def touch_file(self):
         self.bucket.put_object(Key='snacks.json', Body=json.dumps({}))
+
+def read_file_as_string(filename):
+    with open (filename, "r") as f:
+        return f.read().replace('\n', '')
