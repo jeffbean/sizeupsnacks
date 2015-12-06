@@ -11,7 +11,7 @@ def get_products():
 
 
 def save_products():
-    fileio.FileIO().write(get_products.products)
+    fileio.FileIO().write(get_products())
 
 
 if __name__ == '__main__':

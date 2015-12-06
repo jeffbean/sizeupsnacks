@@ -1,13 +1,13 @@
 from flask import Flask, jsonify
 from flask import render_template
 from flask import abort
-
 from VoteStats import VoteStats
-import os
 from WeightedAverage import WeightedAverage
 
+import os
 import product
 import logging
+import threading
 
 FORMAT = '%(asctime)-15s [%(levelname)s] %(message)s'
 DATE_FMT = '%m/%d/%Y %H:%M:%S'
@@ -15,6 +15,8 @@ DATE_FMT = '%m/%d/%Y %H:%M:%S'
 loglevel = logging.DEBUG if os.environ.get('FLASK_DEBUG') else logging.INFO
 logging.basicConfig(format=FORMAT, datefmt=DATE_FMT, level=loglevel)
 
+t = threading.Timer(60*5, product.save_products)
+t.start()  # after 5 minutes products will be saved
 application = Flask(__name__)
 stats = VoteStats([0, 0, 0, 0, 0])
 

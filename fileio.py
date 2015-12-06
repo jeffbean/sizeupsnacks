@@ -3,6 +3,7 @@ import os
 
 import boto3
 import botocore
+import logging
 
 
 class FileIO:
@@ -40,6 +41,7 @@ class FileIO:
         return json.load(open('snacks-local.json', 'r'))
 
     def write(self, json_data):
+        logging.info("Putting object {0}".format(json_data))
         self.bucket.put_object(Key='snacks.json', Body=json.dumps(json_data))
 
     def touch_file(self):
