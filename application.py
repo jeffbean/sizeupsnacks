@@ -3,6 +3,7 @@ from flask import render_template
 from flask import abort
 from VoteStats import VoteStats
 from WeightedAverage import WeightedAverage
+from collections import OrderedDict
 
 import os
 import product
@@ -18,13 +19,16 @@ logging.basicConfig(format=FORMAT, datefmt=DATE_FMT, level=loglevel)
 t = threading.Timer(60*5, product.save_products)
 t.start()  # after 5 minutes products will be saved
 application = Flask(__name__)
+application.logger.addHandler(logging.StreamHandler())
+application.logger.setLevel(logging.INFO)
 application.jinja_env.globals.update(min=min)
 stats = VoteStats([0, 0, 0, 0, 0])
 
 
 @application.route('/')
-def hello_world(name=None):
-    return render_template('snacks.html', name=name, products=product.get_products())
+def home_page():
+    products_dict = product.get_products()
+    return render_template('snacks.html', products=(OrderedDict(sorted(products_dict.items(), key=lambda x: -x[1]['rating']))))
 
 
 @application.route('/api/products', methods=['GET'])
