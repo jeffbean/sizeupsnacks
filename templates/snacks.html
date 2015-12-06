@@ -13,12 +13,12 @@
             <div class="test">
                 <img class="productImage" src="{{ product.image_url }}"/>
                 {% with url_prefix = "/api/products/" + key + "/rank/" %}
-                <fieldset class="rating">
-                    <span data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
-                    <span data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
-                    <span data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
-                    <span data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
-                    <span data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
+                <fieldset class="rating" title="{{ product.rating }} stars">
+                    <span title="Awful" data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
+                    <span title="Bad" data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
+                    <span title="Average" data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
+                    <span title="Good" data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
+                    <span title="Awesome" data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
                 </fieldset>
                 <div class="jqueryStats">
                     <span style="padding-left: 15px; float: left">{{ product.product_name }}</span>
