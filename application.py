@@ -3,6 +3,8 @@ from flask import render_template
 
 from VoteStats import VoteStats
 import os
+from WeightedAverage import WeightedAverage
+
 import product
 import logging
 
@@ -22,18 +24,15 @@ def hello_world(name=None):
     return render_template('snacks.html', name=name, products=product.get_products())
 
 
-# @application.route('/test/vote/<vote>')
-# def vote_test(vote):
-#     stats.vote(int(vote))
-#     return "<div>{0}</div>".format(stats)
-
-
-# @application.route('/vote/<key>')
-# def vote_test(key, rating=None):
-#     # stats.vote(int(vote))
-#     product.get_products()[key]['rating'] = newRating
-#     product.get_products()[key]['votes'] += 1
-#     return "<div>{0}</div>".format(stats)
+@application.route('/test/vote/<key>/<vote>')
+def vote_test(key, vote):
+    found = product.get_products()[key]
+    if found:
+        rank = WeightedAverage(float(found['rating']), int(found['votes'])).add_value(int(vote))
+        found['rating'] = rank.rank
+        found['votes'] = rank.count
+    # else: need to warn but not on the main page
+    return "<div>{0}</div>".format(rank.rank)
 
 
 if __name__ == '__main__':
