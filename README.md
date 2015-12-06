@@ -21,3 +21,8 @@ After downloading run:
 
 Example:
     pip install lxml‑3.5.0‑cp35‑none‑win_amd64.whl
+
+Install aws-cli from http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-msi-on-windows
+After install run
+    aws configure
+Default region should be us-west-2
