@@ -39,11 +39,15 @@ def get_products():
 def fill_in_vote_stats():
     products = product.get_products()
     for item in products.values():
-        if 'votes_by_star' not in item.keys():
-            vote_stats = VoteStats(None, item['rating'], item['votes'])
-            item['votes_by_star'] = vote_stats.votes_by_star
-            item['rating'] = vote_stats.rank()
+        ensure_vote_stats(item)
     return jsonify(products)
+
+
+def ensure_vote_stats(item):
+    if 'votes_by_star' not in item.keys():
+        vote_stats = VoteStats(None, item['rating'], item['votes'])
+        item['votes_by_star'] = vote_stats.votes_by_star
+        item['rating'] = vote_stats.rank()
 
 
 @application.route('/api/products/<product_id>', methods=['GET'])
@@ -51,18 +55,22 @@ def get_product(product_id):
     products = product.get_products()
     if product_id in products.keys():
         item = product.get_products()[product_id]
-        if 'votes_by_star' not in item.keys():
-            vote_stats = VoteStats(None, item['rating'], item['votes'])
-            item['votes_by_star'] = vote_stats.votes_by_star
+        ensure_vote_stats(item)
         return jsonify(item)
     abort(404)
 
 
 @application.route('/api/products/<product_id>/rank/<rank>', methods=['POST'])
 def update_product(product_id, rank):
+    if not rank.isdigit():
+        abort(401)
+    elif int(rank) > 5 or int(rank) < 1:
+        abort(400)
     products = product.get_products()
     if product_id in products.keys():
         item = product.get_products()[product_id]
+        ensure_vote_stats(item)
+        item['votes_by_star'][int(rank)-1] += 1
         new_rank = WeightedAverage(float(item['rating']), int(item['votes'])).add_value(int(rank))
         item['rating'] = new_rank.rank
         item['votes'] = new_rank.count
