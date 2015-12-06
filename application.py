@@ -6,6 +6,7 @@ import product
 
 application = Flask(__name__)
 
+
 @application.route('/')
 @application.route('/<name>')
 def hello_world(name=None):
