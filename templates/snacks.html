@@ -12,7 +12,6 @@
         {% for key, product in products.items() %}
             <div class="test">
                 <img class="productImage" src="{{ product.image_url }}"/>
-                <span style="vertical-align: middle; padding-left: 15px">{{ product.product_name }}</span>
                 {% with round_rating = product.rating|round(0,"common") %}
                 {% with url_prefix = "/api/products/" + key + "/rank/" %}
                 <fieldset class="rating">
@@ -22,6 +21,10 @@
                     <input data-posturl="{{ url_prefix }}2" type="radio" id="notGood{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="2" {% if round_rating > 1 and round_rating <= 2 %} checked {% endif %}/><label for="notGood{{ loop.index0 }}" title="Kinda bad">2 stars</label>
                     <input data-posturl="{{ url_prefix }}1" type="radio" id="sucks{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="1" {% if round_rating > 0 and round_rating <= 1 %} checked {% endif %}/><label for="sucks{{ loop.index0 }}" title="Sucks big time">1 star</label>
                 </fieldset>
+                <div>
+                    <span style="padding-left: 15px; float: left">{{ product.product_name }}</span>
+                    <span style="padding-left: 15px; float: left">{{ product.rating }} - {{ product.votes }}</span>
+                </div>
                 {% endwith %}
                 {% endwith %}
             </div>

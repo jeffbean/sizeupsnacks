@@ -28,7 +28,24 @@ var SUS = (function() {
     };
 
     var ratingClickHandler = function($this) {
-        $.post($this.data('posturl'));
+        console.debug("Rating clicked: ", $this);
+        console.debug("Rating clicked parent: ", $this.parent());
+
+        var $parent = $this.parent();
+        var cooldown = $parent.data('cooldown');
+
+        if (cooldown === undefined || !cooldown) {
+            console.log('Add rating');
+            $.post($this.data('posturl')).done(function() {
+                console.debug('finished posting');
+                $parent.data('cooldown', true);
+                setTimeout(function() {
+                    $parent.data('cooldown', false);
+                }, 5000);
+            });
+        } else {
+            console.log("RELAX!!!");
+        }
     };
 
     return {
