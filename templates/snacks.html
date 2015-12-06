@@ -11,23 +11,24 @@
     {% if products %}
         {% for key, product in products.items() %}
             <div class="test">
-                <img class="productImage" src="{{ product.image_url }}"/>
+                <img style="padding-top:25px" class="productImage" src="{{ product.image_url }}"/>
                 {% with url_prefix = "/api/products/" + key + "/rank/" %}
-                <fieldset class="rating" title="{{ product.rating }} stars">
+                <div style="padding-left: 10px; padding-top:45px" class="rating" title="{{ product.rating }} stars">
                     <span title="Awful" data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
                     <span title="Bad" data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
                     <span title="Average" data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
                     <span title="Good" data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
                     <span title="Awesome" data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
-                </fieldset>
+                </div>
                 <div class="jqueryStats">
-                    <span class="jqueryStatsText" style="padding-left: 15px; float: left">
-                        <div class="jqueryProductName" style="padding-left: 15px; float: left">{{ product.product_name }}</div>
-                        <div>1 star - {{ product.votes_by_star[0]/product.votes|round(2, 'common') * 100 }}%</div>
-                        <div>2 stars - {{ product.votes_by_star[1]/product.votes|round(2, 'common') * 100 }}%</div>
-                        <div>3 stars - {{ product.votes_by_star[2]/product.votes|round(2, 'common') * 100 }}%</div>
-                        <div>4 stars - {{ product.votes_by_star[3]/product.votes|round(2, 'common') * 100 }}%</div>
-                        <div>5 stars - {{ product.votes_by_star[4]/product.votes|round(2, 'common') * 100 }}%</div>
+                    <span class="jqueryStatsText" style="padding-left: 35px; float: left">
+                        <div class="jqueryProductName">{{ product.product_name }}</div>
+                        <div>Total votes - {{ product.votes }}</div>
+                        <div>1 star - {{ ((product.votes_by_star[0]/product.votes) * 100)|round(2, 'common') }}%</div>
+                        <div>2 stars - {{ ((product.votes_by_star[1]/product.votes) * 100)|round(2, 'common') }}%</div>
+                        <div>3 stars - {{ ((product.votes_by_star[2]/product.votes) * 100)|round(2, 'common') }}%</div>
+                        <div>4 stars - {{ ((product.votes_by_star[3]/product.votes) * 100)|round(2, 'common') }}%</div>
+                        <div>5 stars - {{ ((product.votes_by_star[4]/product.votes)* 100)|round(2, 'common') }}%</div>
                     </span>
                 </div>
                 {% endwith %}
