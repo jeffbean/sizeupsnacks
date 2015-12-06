@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask import render_template
+from flask import abort
 
 from VoteStats import VoteStats
 import os
@@ -18,22 +19,34 @@ application = Flask(__name__)
 stats = VoteStats([0, 0, 0, 0, 0])
 
 
-
 @application.route('/')
 def hello_world(name=None):
     return render_template('snacks.html', name=name, products=product.get_products())
 
 
-@application.route('/test/vote/<key>/<vote>')
-def vote_test(key, vote):
-    found = product.get_products()[key]
-    if found:
-        rank = WeightedAverage(float(found['rating']), int(found['votes'])).add_value(int(vote))
-        found['rating'] = rank.rank
-        found['votes'] = rank.count
-        return "<div>{0}</div>".format(rank.rank)
-    # else: need to warn but not on the main page
-    return "<div>{0}</div>".format("Cannot find product with ID " + key)
+@application.route('/api/products', methods=['GET'])
+def get_products():
+    return jsonify(product.get_products())
+
+
+@application.route('/api/products/<product_id>', methods=['GET'])
+def get_product(product_id):
+    products = product.get_products()
+    if product_id in products.keys():
+        return jsonify(product.get_products()[product_id])
+    abort(404)
+
+
+@application.route('/api/products/<product_id>/rank/<rank>', methods=['POST'])
+def update_product(product_id, rank):
+    products = product.get_products()
+    if product_id in products.keys():
+        item = product.get_products()[product_id]
+        new_rank = WeightedAverage(float(item['rating']), int(item['votes'])).add_value(int(rank))
+        item['rating'] = new_rank.rank
+        item['votes'] = new_rank.count
+        return jsonify(item)
+    abort(404)
 
 
 if __name__ == '__main__':
