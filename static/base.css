@@ -57,3 +57,19 @@
     float: left;
     padding-right: 10px;
 }
+
+span.star, span.star span {
+    display: block;
+    background: url(/static/images/starsWithHover%20-%20Copy.png) 0 -32px;
+    width: 32px;
+    height: 32px;
+}
+
+span.star span {
+    background-position: 0 0;
+}
+
+span.starHover {
+    background-position: 0 -64px;
+    width: 32px; !important;
+}

@@ -18,6 +18,7 @@ logging.basicConfig(format=FORMAT, datefmt=DATE_FMT, level=loglevel)
 t = threading.Timer(60*5, product.save_products)
 t.start()  # after 5 minutes products will be saved
 application = Flask(__name__)
+application.jinja_env.globals.update(min=min)
 stats = VoteStats([0, 0, 0, 0, 0])
 
 

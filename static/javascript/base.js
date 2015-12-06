@@ -2,6 +2,12 @@
  * Created by SHAAPAOJA on 12/5/2015.
  */
 
+$.fn.stars = function() {
+    return $(this).each(function() {
+        $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 32));
+    });
+};
+
 var SUS = (function() {
     var initConsole = function (release) {
         /**
@@ -41,7 +47,10 @@ var SUS = (function() {
                 console.log($this.is(':checked'));
 
                 setTimeout(function() {
-                    $parent.find('input[value="' + Math.round(data['rating']) + '"]').prop('checked', true);
+                    $parent.find('span.star').each(function(index) {
+                        var $star = $(this);
+                        $star.text(Math.min(1, data['rating'] - index)).children('span').remove().end().stars();
+                    });
                 }, 2000);
 
                 setTimeout(function() {
@@ -56,9 +65,23 @@ var SUS = (function() {
     return {
         init: function() {
             initConsole(false);
-            $("input").click(function() {
+            $('span.star').hover(function() {
+                var $this = $(this);
+                $this.prevAll().andSelf().each(function() {
+                    var $star = $(this);
+                    $star.children().hide();
+                    $star.addClass('starHover');
+                });
+            }, function() {
+                var $this = $(this);
+                $this.prevAll().andSelf().each(function() {
+                    var $star = $(this);
+                    $star.removeClass('starHover');
+                    $star.children().show();
+                });
+            }).click(function() {
                 ratingClickHandler($(this));
-            });
+            }).stars();
         }
     }
 })();

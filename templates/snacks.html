@@ -12,23 +12,28 @@
         {% for key, product in products.items() %}
             <div class="test">
                 <img class="productImage" src="{{ product.image_url }}"/>
-                {% with round_rating = product.rating|round(0,"common") %}
                 {% with url_prefix = "/api/products/" + key + "/rank/" %}
-                <fieldset class="rating" data-currentrating="{{ round_rating }}">
-                    <input data-posturl="{{ url_prefix }}5" type="radio" id="awesome{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="5" {% if round_rating > 4 %} checked {% endif %}/><label for="awesome{{ loop.index0 }}" title="Rocks!">5 stars</label>
-                    <input data-posturl="{{ url_prefix }}4" type="radio" id="good{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="4" {% if round_rating > 3 and round_rating <= 4 %} checked {% endif %}/><label for="good{{ loop.index0 }}" title="Pretty good">4 stars</label>
-                    <input data-posturl="{{ url_prefix }}3" type="radio" id="average{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="3" {% if round_rating > 2 and round_rating <= 3 %} checked {% endif %}/><label for="average{{ loop.index0 }}" title="Meh">3 stars</label>
-                    <input data-posturl="{{ url_prefix }}2" type="radio" id="notGood{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="2" {% if round_rating > 1 and round_rating <= 2 %} checked {% endif %}/><label for="notGood{{ loop.index0 }}" title="Kinda bad">2 stars</label>
-                    <input data-posturl="{{ url_prefix }}1" type="radio" id="sucks{{ loop.index0 }}" name="rating{{ loop.index0 }}" value="1" {% if round_rating > 0 and round_rating <= 1 %} checked {% endif %}/><label for="sucks{{ loop.index0 }}" title="Sucks big time">1 star</label>
+                <fieldset class="rating">
+                    <span data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
+                    <span data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
+                    <span data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
+                    <span data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
+                    <span data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
                 </fieldset>
                 <div class="jqueryStats">
                     <span style="padding-left: 15px; float: left">{{ product.product_name }}</span>
                     <span class="jqueryStatsText" style="padding-left: 15px; float: left">{{ product.rating|round(2, 'common') }} stars - {{ product.votes }} votes</span>
                 </div>
                 {% endwith %}
-                {% endwith %}
             </div>
             <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <span>
+            </span>
             <br/>
             <br/>
             <br/>
