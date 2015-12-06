@@ -15,7 +15,7 @@ First you will need the awsebcli packge to run the commands:
 
 The default url for UI is: http://snacks-dev.elasticbeanstalk.com/
 
-To install lxml on windows go to http://www.lfd.uci.edu/~gohlke/pythonlibs/ and get the latest lxml whl file.
+To install lxml on windows go to http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml and get the latest lxml whl file.
 After downloading run:
     pip install <whlFile>
 
