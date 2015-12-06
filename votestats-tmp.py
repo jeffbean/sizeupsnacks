@@ -1,18 +1,30 @@
-from WeightedAverage import WeightedAverage
-
+from weightedaverage import WeightedAverage
+import math
 
 class VoteStats:
-    def __init__(self, vote_stats):
-        self.vote_stats = vote_stats
-        self.average = WeightedAverage()
-        weight = 1
-        for votes in vote_stats:
-            if votes > 0:
-                self.average.add_value(weight, votes)
+    def __init__(self, votes_by_star, average, count):
+        if votes_by_star:
+            self.votes_by_star = votes_by_star
+            self.average = WeightedAverage()
+            weight = 1
+            for votes in votes_by_star:
+                if votes > 0:
+                    self.average.add_value(weight, votes)
+                weight += 1
+        else:
+            self.votes_by_star = [0, 0, 0, 0, 0]
+            if count > 0 and average > 0:
+                if average > 5:
+                    raise ValueError("average in not in range [0, 5]")
+                rounded_average = math.ceil(average)
+                self.votes_by_star[rounded_average - 1] = count
+                self.average = WeightedAverage(rounded_average, count)
+            else:
+                self.average = WeightedAverage()
 
     def vote(self, rating):
         self.average = self.average.add_value(rating)
-        self.vote_stats[rating - 1] += 1
+        self.votes_by_star[rating - 1] += 1
 
     def show_stats(self):
         print("some time later: " + self.count() + " ")
@@ -24,7 +36,7 @@ class VoteStats:
         return self.average.rank
 
     def percent(self, index):
-        vote_count = int(self.vote_stats[index])
+        vote_count = int(self.votes_by_star[index])
         if vote_count <= 0:
             print("no votes")
             return 0
