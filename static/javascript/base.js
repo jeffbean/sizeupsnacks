@@ -52,12 +52,14 @@ var SUS = (function() {
                 });
                 $parent.data('cooldown', true);
                 console.log($this.is(':checked'));
+                $parent.siblings('.jqueryThankYou').fadeIn();
 
                 setTimeout(function() {
                     $parent.find('span.star').each(function(index) {
                         var $star = $(this);
                         $star.text(Math.min(1, data['rating'] - index)).children('span').remove().end().stars();
                     });
+                    $parent.siblings('.jqueryThankYou').fadeOut();
                 }, 2000);
 
                 setTimeout(function() {

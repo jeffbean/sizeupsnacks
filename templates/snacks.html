@@ -11,7 +11,7 @@
     <body>
     {% if products %}
         {% for key, product in products.items() %}
-            <div class="test" style="margin-left: auto; margin-right: auto; width: 750px">
+            <div style="margin-left: auto; margin-right: auto; width: 950px">
                 <img style="padding-top:25px;" class="productImage" src="{{ product.image_url }}"/>
                 {% with url_prefix = "/api/products/" + key + "/rank/" %}
                 <div style="padding-left: 10px; padding-top:45px" class="rating" title="{{ product.rating }} stars">
@@ -32,6 +32,7 @@
                         <div>5 stars - {{ ((product.votes_by_star[4]/product.votes)* 100)|round(2, 'common') }}%</div>
                     </span>
                 </div>
+                <span class="jqueryThankYou" style="color: green; padding-left:20px; display: none">Thank you for voting!</span>
                 {% endwith %}
             </div>
             <br/>
