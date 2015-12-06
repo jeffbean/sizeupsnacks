@@ -2,9 +2,12 @@ from flask import Flask
 from flask import render_template
 
 from Product import Product
+from VoteStats import VoteStats
 
 
 application = Flask(__name__)
+stats = VoteStats([0, 0, 0, 0, 0])
+
 
 @application.route('/')
 @application.route('/<name>')
@@ -22,6 +25,12 @@ def hello_world(name=None):
     products.append(Product("test10", "http://myUrl", "http://myPicture", 3.5, 10))
     products.append(Product("test11", "http://myUrl", "http://myPicture", 4.5, 10))
     return render_template('snacks.html', name=name, products=products)
+
+
+@application.route('/test/vote/<vote>')
+def vote_test(vote):
+    stats.vote(int(vote))
+    return "<div>{0}</div>".format(stats)
 
 
 if __name__ == '__main__':
