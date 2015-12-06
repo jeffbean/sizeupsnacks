@@ -21,8 +21,14 @@
                     <span title="Awesome" data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
                 </fieldset>
                 <div class="jqueryStats">
-                    <span style="padding-left: 15px; float: left">{{ product.product_name }}</span>
-                    <span class="jqueryStatsText" style="padding-left: 15px; float: left">{{ product.rating|round(2, 'common') }} stars - {{ product.votes }} votes</span>
+                    <span class="jqueryStatsText" style="padding-left: 15px; float: left">
+                        <div class="jqueryProductName" style="padding-left: 15px; float: left">{{ product.product_name }}</div>
+                        <div>1 star - {{ product.votes_by_star[0]/product.votes|round(2, 'common') * 100 }}%</div>
+                        <div>2 stars - {{ product.votes_by_star[1]/product.votes|round(2, 'common') * 100 }}%</div>
+                        <div>3 stars - {{ product.votes_by_star[2]/product.votes|round(2, 'common') * 100 }}%</div>
+                        <div>4 stars - {{ product.votes_by_star[3]/product.votes|round(2, 'common') * 100 }}%</div>
+                        <div>5 stars - {{ product.votes_by_star[4]/product.votes|round(2, 'common') * 100 }}%</div>
+                    </span>
                 </div>
                 {% endwith %}
             </div>

@@ -42,7 +42,10 @@ var SUS = (function() {
             $.post($this.data('posturl')).done(function(data) {
                 console.debug('finished posting');
                 console.debug('Got data: ', data);
-                $parent.siblings('.jqueryStats').children('.jqueryStatsText').text(data['rating'].toFixed(2) + ' stars - ' + data['votes'] + ' votes');
+                var $jqueryStatsText = $parent.siblings('.jqueryStats').children('.jqueryStatsText')
+                $jqueryStatsText.children('div').not('.jqueryProductName').each(function(index) {
+                    $(this).text(index + ' stars - ' + (data['votes_by_star'][index]/data['votes']).toFixed(2) * 100 + '%');
+                });
                 $parent.data('cooldown', true);
                 console.log($this.is(':checked'));
 
