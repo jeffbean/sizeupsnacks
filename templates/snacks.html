@@ -14,11 +14,11 @@
                 <img style="padding-top:25px" class="productImage" src="{{ product.image_url }}"/>
                 {% with url_prefix = "/api/products/" + key + "/rank/" %}
                 <div style="padding-left: 10px; padding-top:45px" class="rating" title="{{ product.rating }} stars">
-                    <span title="Awful" data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
-                    <span title="Bad" data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
-                    <span title="Average" data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
-                    <span title="Good" data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
-                    <span title="Awesome" data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
+                    <span title="Never buy again. My taste buds have been ruined by this monstrosity." data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
+                    <span title="Boring" data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
+                    <span title="Ordinary" data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
+                    <span title="I'd eat that" data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
+                    <span title="Yes, please. Buy all the time, always." data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
                 </div>
                 <div class="jqueryStats">
                     <span class="jqueryStatsText" style="padding-left: 35px; float: left">
