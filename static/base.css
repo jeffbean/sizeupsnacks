@@ -60,7 +60,7 @@
 
 span.star, span.star span {
     display: block;
-    background: url(/static/images/starsWithHover%20-%20Copy.png) 0 -32px;
+    background: url(/static/images/stars.png) 0 -32px;
     width: 32px;
     height: 32px;
 }
