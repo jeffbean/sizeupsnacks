@@ -33,12 +33,15 @@ var SUS = (function() {
         }
     };
 
+    var cooldownTimerFunction = null;
+
     var ratingClickHandler = function($this) {
         var $parent = $this.parent();
-        var cooldown = $parent.data('cooldown');
+        var cooldownCount = $parent.data('cooldownCount');
+        var COOLDOWN_TIME = 1000;
 
-        if (cooldown === undefined || !cooldown) {
-            console.log('Add rating');
+        console.log("cooldownCount: ", cooldownCount);
+        if (cooldownCount === undefined || cooldownCount === -1) {
             $.post($this.data('posturl')).done(function(data) {
                 console.debug('finished posting');
                 console.debug('Got data: ', data);
@@ -51,7 +54,6 @@ var SUS = (function() {
                     }
                 });
                 $parent.data('cooldown', true);
-                console.log($this.is(':checked'));
                 $parent.siblings('.jqueryThankYou').fadeIn();
 
                 setTimeout(function() {
@@ -62,12 +64,38 @@ var SUS = (function() {
                     $parent.siblings('.jqueryThankYou').fadeOut();
                 }, 2000);
 
-                setTimeout(function() {
-                    $parent.data('cooldown', false);
-                }, 5000);
+                $parent.data('cooldownCount', 0);
+
+                cooldownTimerFunction = setTimeout(function() {
+                    console.log('Cooldown set');
+                    $parent.data('cooldownCount', -1);
+                }, COOLDOWN_TIME);
             });
         } else {
-            console.log("RELAX!!!");
+            var $calmDown = $parent.siblings('.jqueryCalmDown');
+            clearTimeout(cooldownTimerFunction);
+
+            $parent.data('cooldownCount', cooldownCount + 1);
+
+            if (cooldownCount + 1 > 100) {
+                $calmDown.text('Your cooldown is now ' + Math.round((COOLDOWN_TIME * cooldownCount)/60000) + ' minutes. Good luck waiting for that.');
+            } else if (cooldownCount + 1 > 25) {
+                $calmDown.text('OK come on now! JUST STOP!');
+            } else if (cooldownCount + 1 > 5) {
+                $calmDown.text('Wow. You really want to vote!');
+            }
+
+            $calmDown.fadeIn();
+
+            var elongatedTimer = COOLDOWN_TIME * (cooldownCount + 1);
+            cooldownTimerFunction = setTimeout(function() {
+                console.log('Cooldown set');
+                $parent.data('cooldownCount', -1);
+            }, elongatedTimer);
+
+            setTimeout(function() {
+                $parent.siblings('.jqueryCalmDown').fadeOut();
+            }, 2000);
         }
     };
 
