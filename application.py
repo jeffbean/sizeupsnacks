@@ -32,8 +32,9 @@ def vote_test(key, vote):
         rank = WeightedAverage(float(found['rating']), int(found['votes'])).add_value(int(vote))
         found['rating'] = rank.rank
         found['votes'] = rank.count
+        return "<div>{0}</div>".format(rank.rank)
     # else: need to warn but not on the main page
-    return "<div>{0}</div>".format(rank.rank)
+    return "<div>{0}</div>".format("Cannot find product with ID " + key)
 
 
 if __name__ == '__main__':
