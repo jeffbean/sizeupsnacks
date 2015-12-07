@@ -26,7 +26,7 @@ class FileIO:
                 raise ValueError()
         return bucket
 
-    def read(self):
+    def read(self, pathPrefix='snacks'):
         try:
             if os.path.isfile('snacks-local.json'):
                 os.remove('snacks-local.json')
@@ -46,6 +46,27 @@ class FileIO:
 
     def touch_file(self):
         self.bucket.put_object(Key='snacks.json', Body=json.dumps({}))
+
+    def read_apps(self):
+        try:
+            if os.path.isfile('apps-local.json'):
+                os.remove('apps-local.json')
+            s3obj = self.bucket.download_file('apps.json', 'apps-local.json')
+        except botocore.exceptions.ClientError as e:
+            # If a client error is thrown, then check that it was a 404 error.
+            # If it was a 404 error, then the bucket does not exist.
+            error_code = int(e.response['Error']['Code'])
+            if error_code == 404:
+                self.touch_file()
+
+        return json.load(open('apps-local.json', 'r'))
+
+    def write_apps(self, json_data):
+        logging.info("Putting object {0}".format(json_data))
+        self.bucket.put_object(Key='apps.json', Body=json.dumps(json_data))
+
+    def touch_file_apps(self):
+        self.bucket.put_object(Key='apps.json', Body=json.dumps({}))
 
 def read_file_as_string(filename):
     with open (filename, "r") as f:

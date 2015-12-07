@@ -6,30 +6,44 @@
         <script src="/static/javascript/base.js" type="text/javascript"></script>
         <meta charset="UTF-8">
         <title>Size Up Snacks</title>
-        <h1 style="text-align: center">It was the best of snacks, it was the worst of snacks. Vote below</h1>
+        {% if pageType == 'products' %}
+            <h1 style="text-align: center">It was the best of snacks, it was the worst of snacks. Vote below</h1>
+        {% else %}
+            <h1 style="text-align: center">Vote below</h1>
+        {% endif %}
     </head>
     <body>
     {% if products %}
         {% for key, product in products.items() %}
             <div style="margin-left: auto; margin-right: auto; width: 950px">
-                <img style="padding-top:25px;" class="productImage" src="{{ product.image_url }}"/>
-                {% with url_prefix = "/api/products/" + key + "/rank/" %}
+                {% if product.image_url != None %}
+                    <img style="padding-top:25px;" class="productImage" src="{{ product.image_url }}"/>
+                {% endif %}
+                {% with url_prefix = "/api/" + pageType + "/" + key + "/rank/" %}
                 <div style="padding-left: 10px; padding-top:45px" class="rating" title="{{ product.rating }} stars">
-                    <span title="Never buy again. My taste buds have been ruined by this monstrosity." data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
-                    <span title="Boring" data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
-                    <span title="Ordinary" data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
-                    <span title="I'd eat that" data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
-                    <span title="Yes, please. Buy all the time, always." data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
+                    <span {% if pageType == 'products' %} title="Never buy again. My taste buds have been ruined by this monstrosity." {% else %} title="Needs work." {% endif %} data-posturl="{{ url_prefix }}1" style="float:left" class="star">{{ min(1, product.rating) }}</span>
+                    <span {% if pageType == 'products' %} title="Boring" {% else %} title="Boring." {% endif %} data-posturl="{{ url_prefix }}2" style="float:left" class="star">{{ min(1, product.rating - 1) }}</span>
+                    <span {% if pageType == 'products' %} title="Ordinary" {% else %} title="Ordinary." {% endif %} data-posturl="{{ url_prefix }}3" style="float:left" class="star">{{ min(1, (product.rating - 2)) }}</span>
+                    <span {% if pageType == 'products' %} title="I'd eat that" {% else %} title="Good." {% endif %} data-posturl="{{ url_prefix }}4" style="float:left" class="star">{{ min(1, (product.rating - 3)) }}</span>
+                    <span {% if pageType == 'products' %} title="Yes, please. Buy all the time, always." {% else %} title="Awesome." {% endif %} data-posturl="{{ url_prefix }}5" style="float:left" class="star">{{ product.rating - 4 }}</span>
                 </div>
                 <div class="jqueryStats">
                     <span class="jqueryStatsText" style="padding-left: 35px; float: left">
-                        <div class="jqueryProductName">{{ product.product_name }}</div>
+                        <div class="jqueryProductName"><a href="{{ product.product_url }}">{{ product.product_name }}</a></div>
                         <div>Total votes - {{ product.votes }}</div>
-                        <div>1 star - {{ ((product.votes_by_star[0]/product.votes) * 100)|round(2, 'common') }}%</div>
-                        <div>2 stars - {{ ((product.votes_by_star[1]/product.votes) * 100)|round(2, 'common') }}%</div>
-                        <div>3 stars - {{ ((product.votes_by_star[2]/product.votes) * 100)|round(2, 'common') }}%</div>
-                        <div>4 stars - {{ ((product.votes_by_star[3]/product.votes) * 100)|round(2, 'common') }}%</div>
-                        <div>5 stars - {{ ((product.votes_by_star[4]/product.votes)* 100)|round(2, 'common') }}%</div>
+                        {% if product.votes > 0 %}
+                            <div>5 stars - {{ ((product.votes_by_star[4]/product.votes)* 100)|round(2, 'common') }}%</div>
+                            <div>4 stars - {{ ((product.votes_by_star[3]/product.votes) * 100)|round(2, 'common') }}%</div>
+                            <div>3 stars - {{ ((product.votes_by_star[2]/product.votes) * 100)|round(2, 'common') }}%</div>
+                            <div>2 stars - {{ ((product.votes_by_star[1]/product.votes) * 100)|round(2, 'common') }}%</div>
+                            <div>1 star - {{ ((product.votes_by_star[0]/product.votes) * 100)|round(2, 'common') }}%</div>
+                        {% else %}
+                            <div>5 stars - 0%</div>
+                            <div>4 stars - 0%</div>
+                            <div>3 stars - 0%</div>
+                            <div>2 stars - 0%</div>
+                            <div>1 star - 0%</div>
+                        {% endif %}
                     </span>
                 </div>
                 <span class="jqueryThankYou" style="color: green; padding-left:20px; display: none">Thank you for voting!</span>
