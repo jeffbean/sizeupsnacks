@@ -4,7 +4,6 @@ from flask import abort
 from votestats import VoteStats
 from weightedaverage import WeightedAverage
 from collections import OrderedDict
-
 import os
 import product
 import logging
@@ -15,6 +14,12 @@ DATE_FMT = '%m/%d/%Y %H:%M:%S'
 
 loglevel = logging.DEBUG if os.environ.get('FLASK_DEBUG') else logging.INFO
 logging.basicConfig(format=FORMAT, datefmt=DATE_FMT, level=loglevel)
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+scheduler = AsyncIOScheduler()
+scheduler.add_job(product.save_products, 'interval', seconds=10)
+scheduler.start()
 
 t = threading.Timer(60 * 5, product.save_products)
 t.start()  # after 5 minutes products will be saved
@@ -27,7 +32,8 @@ application.jinja_env.globals.update(min=min)
 @application.route('/')
 def home_page():
     products_dict = product.get_products()
-    return render_template('snacks.html', products=(OrderedDict(sorted(products_dict.items(), key=lambda x: -x[1]['rating']))))
+    return render_template('snacks.html',
+                           products=(OrderedDict(sorted(products_dict.items(), key=lambda x: -x[1]['rating']))))
 
 
 @application.route('/api/products', methods=['GET'])
@@ -70,7 +76,7 @@ def update_product(product_id, rank):
     if product_id in products.keys():
         item = product.get_products()[product_id]
         ensure_vote_stats(item)
-        item['votes_by_star'][int(rank)-1] += 1
+        item['votes_by_star'][int(rank) - 1] += 1
         new_rank = WeightedAverage(float(item['rating']), int(item['votes'])).add_value(int(rank))
         item['rating'] = new_rank.rank
         item['votes'] = new_rank.count
