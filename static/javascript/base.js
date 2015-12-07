@@ -50,7 +50,7 @@ var SUS = (function() {
                     if (index == 0) {
                         $(this).text('Total votes - ' + data['votes']);
                     } else {
-                        $(this).text(index + ' stars - ' + ((data['votes_by_star'][index-1]/data['votes']) * 100).toFixed(2) + '%');
+                        $(this).text(6-index + ' stars - ' + ((data['votes_by_star'][5-index]/data['votes']) * 100).toFixed(2) + '%');
                     }
                 });
                 $parent.data('cooldown', true);

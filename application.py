@@ -27,12 +27,22 @@ application.jinja_env.globals.update(min=min)
 @application.route('/')
 def home_page():
     products_dict = product.get_products()
-    return render_template('snacks.html', products=(OrderedDict(sorted(products_dict.items(), key=lambda x: -x[1]['rating']))))
+    return render_template('snacks.html', pageType='products', products=(OrderedDict(sorted(products_dict.items(), key=lambda x: -x[1]['rating']))))
+
+@application.route('/apps')
+def apps_page():
+    apps_dict = product.get_apps()
+    return render_template('snacks.html', pageType='apps', products=(OrderedDict(sorted(apps_dict.items(), key=lambda x: -x[1]['rating']))))
 
 
 @application.route('/api/products', methods=['GET'])
 def get_products():
     return jsonify(product.get_products())
+
+
+@application.route('/api/products/save', methods=['GET'])
+def save_all_products():
+    return jsonify(product.save_products())
 
 
 @application.route('/api/products/fix', methods=['GET'])
@@ -70,6 +80,54 @@ def update_product(product_id, rank):
     if product_id in products.keys():
         item = product.get_products()[product_id]
         ensure_vote_stats(item)
+        item['votes_by_star'][int(rank)-1] += 1
+        new_rank = WeightedAverage(float(item['rating']), int(item['votes'])).add_value(int(rank))
+        item['rating'] = new_rank.rank
+        item['votes'] = new_rank.count
+        return jsonify(item)
+    abort(404)
+
+
+# @application.route('/api/apps', methods=['GET'])
+# def get_apps():
+#     return jsonify(product.get_apps())
+
+
+@application.route('/api/apps/fix', methods=['GET'])
+def fill_in_vote_stats_apps():
+    apps = product.get_apps()
+    for item in apps.values():
+        ensure_vote_stats_apps(item)
+    return jsonify(apps)
+
+
+def ensure_vote_stats_apps(item):
+    if 'votes_by_star' not in item.keys():
+        vote_stats = VoteStats(None, item['rating'], item['votes'])
+        item['votes_by_star'] = vote_stats.votes_by_star
+        item['rating'] = vote_stats.rank()
+
+
+@application.route('/api/apps/<app_id>', methods=['GET'])
+def get_apps(app_id):
+    apps = product.get_apps()
+    if app_id in apps.keys():
+        item = product.get_apps()[app_id]
+        ensure_vote_stats_apps(item)
+        return jsonify(item)
+    abort(404)
+
+
+@application.route('/api/apps/<app_id>/rank/<rank>', methods=['POST'])
+def update_apps(app_id, rank):
+    if not rank.isdigit():
+        abort(401)
+    elif int(rank) > 5 or int(rank) < 1:
+        abort(400)
+    apps = product.get_apps()
+    if app_id in apps.keys():
+        item = product.get_apps()[app_id]
+        ensure_vote_stats_apps(item)
         item['votes_by_star'][int(rank)-1] += 1
         new_rank = WeightedAverage(float(item['rating']), int(item['votes'])).add_value(int(rank))
         item['rating'] = new_rank.rank
