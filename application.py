@@ -15,10 +15,10 @@ DATE_FMT = '%m/%d/%Y %H:%M:%S'
 loglevel = logging.DEBUG if os.environ.get('FLASK_DEBUG') else logging.INFO
 logging.basicConfig(format=FORMAT, datefmt=DATE_FMT, level=loglevel)
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
-scheduler = AsyncIOScheduler()
-scheduler.add_job(product.save_products, 'interval', seconds=10)
+scheduler = BackgroundScheduler()
+scheduler.add_job(product.save_products, 'interval', seconds=60)
 scheduler.start()
 
 t = threading.Timer(60 * 5, product.save_products)
