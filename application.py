@@ -18,7 +18,7 @@ logging.basicConfig(format=FORMAT, datefmt=DATE_FMT, level=loglevel)
 from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(product.save_products, 'interval', seconds=60)
+scheduler.add_job(product.save_products, 'interval', seconds=60*5)
 scheduler.start()
 
 t = threading.Timer(60 * 5, product.save_products)
